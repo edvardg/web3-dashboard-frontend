@@ -20,6 +20,11 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
   const { setAuth } = useAuthStore()
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     if (isConnected) {
@@ -56,6 +61,10 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
       signInWithEthereum()
     }
   }, [isConnected, address, signMessageAsync, setAuth, onClose, router])
+
+  if (!mounted) {
+    return null // Render nothing on the server
+  }
 
   return (
     <Box
