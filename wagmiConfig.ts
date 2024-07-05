@@ -1,6 +1,6 @@
-import { http, createConfig } from "wagmi";
-import { base, mainnet, optimism } from "wagmi/chains";
-import { metaMask } from "wagmi/connectors";
+import { http, createConfig } from 'wagmi'
+import { base, mainnet, optimism } from 'wagmi/chains'
+import { metaMask } from 'wagmi/connectors'
 
 export const config = createConfig({
   chains: [mainnet, base, optimism],
@@ -10,4 +10,4 @@ export const config = createConfig({
     [base.id]: http(),
     [optimism.id]: http(),
   },
-});
+})

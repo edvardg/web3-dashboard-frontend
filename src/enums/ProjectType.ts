@@ -1,4 +1,4 @@
 export enum ProjectType {
-    Token = 'token',
-    NFT = 'nft',
+  Token = 'token',
+  NFT = 'nft',
 }
