@@ -28,9 +28,7 @@ export default function RootLayout({
               <WalletConnect />
             </Toolbar>
           </AppBar>
-          <Box sx={{ padding: '20px', textAlign: 'center' }}>
-            {children}
-          </Box>
+          <Box sx={{ padding: '20px', textAlign: 'center' }}>{children}</Box>
         </Providers>
       </body>
     </html>

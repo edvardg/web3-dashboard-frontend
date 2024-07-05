@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useEffect } from 'react'
-import { Box, Button, Typography, CircularProgress } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Button, Typography, CircularProgress, Alert } from '@mui/material'
 import { useConnect, useAccount, useSignMessage } from 'wagmi'
 import { SiweMessage } from 'siwe'
 import { useRouter } from 'next/navigation'
@@ -19,6 +19,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
   const { signMessageAsync } = useSignMessage()
   const { setAuth } = useAuthStore()
   const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (isConnected) {
@@ -47,6 +48,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
           onClose()
           router.push('/dashboard') // Navigate to dashboard
         } catch (error) {
+          setError('Sign in failed. Please try again.')
           console.error('Sign in failed:', error)
         }
       }
@@ -72,9 +74,17 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
       <Typography variant="h6" gutterBottom>
         Connect Wallet
       </Typography>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
       {connectors.length > 0 && (
         <Button
-          onClick={() => connect({ connector: connectors[0] })}
+          onClick={() => {
+            setError(null)
+            connect({ connector: connectors[0] })
+          }}
           disabled={isPending}
           sx={{
             mt: 2,
