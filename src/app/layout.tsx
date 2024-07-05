@@ -25,9 +25,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Toolbar>
             </AppBar>
             <Box sx={{ padding: '20px', textAlign: 'center' }}>
-                <Typography variant="h2" gutterBottom>
-                    Welcome to the Web3 Dashboard
-                </Typography>
+                {/*<Typography variant="h2" gutterBottom>*/}
+                {/*    Welcome to the Web3 Dashboard*/}
+                {/*</Typography>*/}
                 {children}
             </Box>
         </Providers>

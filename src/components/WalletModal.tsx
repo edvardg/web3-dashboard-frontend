@@ -4,7 +4,9 @@ import React, { useEffect } from 'react';
 import { Box, Button, Typography, CircularProgress } from '@mui/material';
 import { useConnect, useAccount, useSignMessage } from 'wagmi';
 import { SiweMessage } from 'siwe';
-import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/authStore';
+import { authService } from '@/api/services';
 
 interface WalletModalProps {
     onClose: () => void;
@@ -14,6 +16,8 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
     const { connectors, connect, isPending } = useConnect();
     const { address, isConnected } = useAccount();
     const { signMessageAsync } = useSignMessage();
+    const { setAuth } = useAuthStore();
+    const router = useRouter();
 
     useEffect(() => {
         if (isConnected) {
@@ -32,13 +36,11 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
                         message: message.prepareMessage(),
                     });
 
-                    await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/signin`, {
-                        message: message.prepareMessage(),
-                        signature,
-                        walletAddress: address,
-                    });
+                    const response = await authService.signIn(address!, message.prepareMessage(), signature);
 
+                    setAuth(address!, response.access_token);
                     onClose();
+                    router.push('/dashboard'); // Navigate to dashboard
                 } catch (error) {
                     console.error('Sign in failed:', error);
                 }
@@ -46,7 +48,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ onClose }) => {
 
             signInWithEthereum();
         }
-    }, [isConnected, address, signMessageAsync, onClose]);
+    }, [isConnected, address, signMessageAsync, setAuth, onClose, router]);
 
     return (
         <Box
