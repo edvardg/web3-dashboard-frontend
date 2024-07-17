@@ -18,28 +18,22 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/stores/authStore'
 import { useProjectStore } from '@/stores/projectStore'
 import { UserProject } from '@/interfaces'
+import WithAuth from '@/hocs/WithAuth'
 
 const Dashboard = () => {
   const router = useRouter()
-  const { accessToken, walletAddress, clearAuth } = useAuthStore()
+  const { accessToken } = useAuthStore()
   const { trackedProjects, fetchTrackedProjects } = useProjectStore()
   const [tabValue, setTabValue] = useState(0)
 
   useEffect(() => {
-    if (!accessToken) {
-      router.push('/')
-    } else {
+    if (accessToken) {
       fetchTrackedProjects(accessToken)
     }
-  }, [accessToken, fetchTrackedProjects, router])
+  }, [accessToken, fetchTrackedProjects])
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue)
-  }
-
-  const handleLogout = () => {
-    clearAuth()
-    router.push('/')
   }
 
   const filterProjects = (type: string): UserProject[] => {
@@ -96,22 +90,6 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={2}
-      >
-        <Typography variant="h4">Web3 Dashboard</Typography>
-        <Box display="flex" alignItems="center">
-          <Typography variant="h6" mr={2}>
-            {walletAddress}
-          </Typography>
-          <Button onClick={handleLogout} variant="contained" color="primary">
-            Logout
-          </Button>
-        </Box>
-      </Box>
       <Tabs
         value={tabValue}
         onChange={handleTabChange}
@@ -125,6 +103,7 @@ const Dashboard = () => {
           variant="contained"
           color="primary"
           onClick={() => router.push('/track-project')}
+          sx={{ mb: 2 }}
         >
           Add More Projects
         </Button>
@@ -143,4 +122,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default WithAuth(Dashboard)

@@ -1,13 +1,18 @@
 import { http, createConfig } from 'wagmi'
-import { base, mainnet, optimism } from 'wagmi/chains'
+import { mainnet, sepolia } from 'wagmi/chains'
 import { metaMask } from 'wagmi/connectors'
 
 export const config = createConfig({
-  chains: [mainnet, base, optimism],
-  connectors: [metaMask()],
+  chains: [mainnet, sepolia],
+  connectors: [
+    metaMask({
+      dappMetadata: {
+        name: 'Web3 Dashboard',
+      },
+    }),
+  ],
   transports: {
     [mainnet.id]: http(),
-    [base.id]: http(),
-    [optimism.id]: http(),
+    [sepolia.id]: http(),
   },
 })
