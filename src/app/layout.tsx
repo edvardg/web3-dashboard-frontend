@@ -1,6 +1,6 @@
 import React from 'react'
 import { Inter } from 'next/font/google'
-import { Providers } from './providers'
+import { Providers } from '@/providers/wagmi'
 import WalletConnect from '@/components/WalletConnect'
 import { AppBar, Toolbar, Typography, Box } from '@mui/material'
 
